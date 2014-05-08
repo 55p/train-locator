@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -29,7 +29,9 @@ public class RecordResource {
 	@GET
 	@Path("/observation/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByObservation(@PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response getByObservation(@PathParam("id") String id,  @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		Calendar c = Calendar.getInstance();
 		
 		List<RecordMapping> mappedRecord = findByObservation(id, c.get(Calendar.YEAR), 1+c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -39,7 +41,9 @@ public class RecordResource {
 	@GET
 	@Path("/observation/{id}/{year}/{month}/{day}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByObservationDate(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @PathParam("day") int day, @Context HttpServletRequest httpRequest) {
+	public Response getByObservationDate(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @PathParam("day") int day, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List<RecordMapping> mappedRecord = findByObservation(id, year, month, day);
 		return Response.ok(mappedRecord).build();
 	}
@@ -47,7 +51,9 @@ public class RecordResource {
 	@GET
 	@Path("/observation/{id}/{year}/{month}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByObservationMonth(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @Context HttpServletRequest httpRequest) {	
+	public Response getByObservationMonth(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+			
 		List<RecordMapping> mappedRecord = findByObservation(id, year, month, -1);
 		return Response.ok(mappedRecord).build();
 	}
@@ -55,7 +61,9 @@ public class RecordResource {
 	@GET
 	@Path("/group/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByGroup(@PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response getByGroup(@PathParam("id") String id, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		Calendar c = Calendar.getInstance();
 		
 		List<RecordMapping> mappedRecord = findByGroup(id, c.get(Calendar.YEAR), 1+c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -65,7 +73,9 @@ public class RecordResource {
 	@GET
 	@Path("/group/{id}/{year}/{month}/{day}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByGroupDate(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @PathParam("day") int day, @Context HttpServletRequest httpRequest) {
+	public Response getByGroupDate(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @PathParam("day") int day, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List<RecordMapping> mappedRecord = findByGroup(id, year, month, day);
 		return Response.ok(mappedRecord).build();
 	}
@@ -73,7 +83,9 @@ public class RecordResource {
 	@GET
 	@Path("/group/{id}/{year}/{month}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByGroupMonth(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @Context HttpServletRequest httpRequest) {	
+	public Response getByGroupMonth(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+			
 		List<RecordMapping> mappedRecord = findByGroup(id, year, month, -1);
 		return Response.ok(mappedRecord).build();
 	}
@@ -81,7 +93,9 @@ public class RecordResource {
 	@GET
 	@Path("/day/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByDay(@PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response getByDay(@PathParam("id") String id, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		Calendar c = Calendar.getInstance();
 		
 		List<RecordMapping> mappedRecord = findByDay(id, c.get(Calendar.YEAR), 1+c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -91,7 +105,9 @@ public class RecordResource {
 	@GET
 	@Path("/day/{id}/{year}/{month}/{day}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByDayDate(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @PathParam("day") int day, @Context HttpServletRequest httpRequest) {
+	public Response getByDayDate(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @PathParam("day") int day, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List<RecordMapping> mappedRecord = findByDay(id, year, month, day);
 		return Response.ok(mappedRecord).build();
 	}
@@ -99,7 +115,9 @@ public class RecordResource {
 	@GET
 	@Path("/day/{id}/{year}/{month}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByDayMonth(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @Context HttpServletRequest httpRequest) {	
+	public Response getByDayMonth(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+			
 		List<RecordMapping> mappedRecord = findByDay(id, year, month, -1);
 		return Response.ok(mappedRecord).build();
 	}
@@ -107,7 +125,9 @@ public class RecordResource {
 	@GET
 	@Path("/train/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByTrain(@PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response getByTrain(@PathParam("id") String id, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		Calendar c = Calendar.getInstance();
 		
 		List<RecordMapping> mappedRecord = findByTrain(id, c.get(Calendar.YEAR), 1+c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -117,7 +137,9 @@ public class RecordResource {
 	@GET
 	@Path("/train/{id}/{year}/{month}/{day}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByTrainDate(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @PathParam("day") int day, @Context HttpServletRequest httpRequest) {
+	public Response getByTrainDate(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @PathParam("day") int day, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List<RecordMapping> mappedRecord = findByTrain(id, year, month, day);
 		return Response.ok(mappedRecord).build();
 	}
@@ -125,7 +147,9 @@ public class RecordResource {
 	@GET
 	@Path("/train/{id}/{year}/{month}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getByTrainMonth(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @Context HttpServletRequest httpRequest) {	
+	public Response getByTrainMonth(@PathParam("id") String id, @PathParam("year") int year, @PathParam("month") int month, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+			
 		List<RecordMapping> mappedRecord = findByTrain(id, year, month, -1);
 		return Response.ok(mappedRecord).build();
 	}

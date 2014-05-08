@@ -3,7 +3,7 @@ package cz.trainlocator.resource;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -30,7 +30,9 @@ public class TrainResource {
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAll(@Context HttpServletRequest httpRequest) {
+	public Response getAll(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List<TrainEntity> list = TrainManager.findAllTrain();
 		List<TrainMapping> trains = TrainMapping.createList(list);
 		return Response.ok(trains).build();
@@ -40,7 +42,9 @@ public class TrainResource {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response create(TrainMapping train, @Context HttpServletRequest httpRequest) {
+	public Response create(TrainMapping train, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		TrainEntity t = TrainManager.addTrain(train);
 		return Response.ok(new TrainMapping(t)).build();
 	}
@@ -49,7 +53,9 @@ public class TrainResource {
 	@Path("/multiple")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createAll(List<TrainMapping> trainList, @Context HttpServletRequest httpRequest) {
+	public Response createAll(List<TrainMapping> trainList, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List <TrainMapping> result = new LinkedList<TrainMapping>();
 		for (TrainMapping train : trainList) {
 			try {
@@ -64,7 +70,9 @@ public class TrainResource {
 	@GET
 	@Path("/{id}/add")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addRecord(@PathParam("id") String id, RecordMapping record, @Context HttpServletRequest httpRequest) {
+	public Response addRecord(@PathParam("id") String id, RecordMapping record, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		//TrainEntity t = TrainManager.findTrain(id);
 		record.setTrainId(id);
 		RecordEntity e = RecordManager.addObservation(record);
@@ -74,7 +82,9 @@ public class TrainResource {
 	@GET
 	@Path("/find/{nr}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findTrain(@PathParam("nr") Integer number, @Context HttpServletRequest httpRequest) {
+	public Response findTrain(@PathParam("nr") Integer number, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List<TrainEntity> t = TrainManager.findTrainByNumber(number);
 		List<TrainMapping> trains = TrainMapping.createList(t);
 		return Response.ok(trains).build();
@@ -83,7 +93,9 @@ public class TrainResource {
 	@GET
 	@Path("/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getById(@PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response getById(@PathParam("id") String id, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		TrainEntity t = TrainManager.findTrain(id);
 		return Response.ok(new TrainMapping(t)).build();
 	}
@@ -92,14 +104,18 @@ public class TrainResource {
 	@Path("/{id}/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response change(TrainMapping train, @PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response change(TrainMapping train, @PathParam("id") String id, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		TrainEntity e = TrainManager.updateTrain(id, train);
 		return Response.ok(new TrainMapping(e)).build();
 	}
 
 	@DELETE
 	@Path("/{id}/")
-	public Response delete(@PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response delete(@PathParam("id") String id, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List<RecordEntity> list = RecordManager.findByTrain(id);
 		if (list.size() > 0) {
 			throw new BadRequestException("There are some observations.");

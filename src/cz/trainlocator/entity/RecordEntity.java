@@ -16,10 +16,11 @@ import cz.trainlocator.manager.TrainManager;
 public class RecordEntity {
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 5L;
-
+	
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key id;
+	
 	@Persistent
     private int year;
 	@Persistent

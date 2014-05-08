@@ -22,6 +22,7 @@ public class TrainEntity {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key id;
+	
 	@Persistent
 	private DayEntity day;
 	@Persistent
@@ -32,6 +33,7 @@ public class TrainEntity {
 	private String track;
 	@Persistent
 	private String limits;
+	
 	@Persistent(mappedBy="train")
 	@Element(dependent = "true")
 	private List<RecordEntity> observations;

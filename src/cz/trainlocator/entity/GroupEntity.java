@@ -18,14 +18,16 @@ import com.google.appengine.api.datastore.KeyFactory;
 public class GroupEntity {
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 2L;
-
+	
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key id;
+	
 	@Persistent
 	private String name;
 	@Persistent
 	private ObservationEntity observation;
+	
 	@Persistent(mappedBy = "group")
 	@Element(dependent = "true")
 	private List<DayEntity> days;

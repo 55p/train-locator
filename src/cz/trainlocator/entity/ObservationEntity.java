@@ -21,14 +21,15 @@ public class ObservationEntity {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key id;
+
 	@Persistent
 	private String name;
+	
 	@Persistent(mappedBy = "observation")
 	@Element(dependent = "true")
 	private List<GroupEntity> groups;
 
-	public ObservationEntity() {
-	}
+	public ObservationEntity() {}
 
 	public Key getId() {
 		return id;

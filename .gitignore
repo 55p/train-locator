@@ -1,4 +1,4 @@
 *.class
-war\WEB-INF\classes\cz\*
-war\WEB-INF\lib\*
-lib\*
+war/WEB-INF/classes/cz/*
+war/WEB-INF/lib/*
+lib/*

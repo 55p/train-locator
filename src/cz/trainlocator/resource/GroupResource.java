@@ -2,7 +2,7 @@ package cz.trainlocator.resource;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,7 +29,9 @@ public class GroupResource {
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAll(@Context HttpServletRequest httpRequest) {
+	public Response getAll(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List<GroupEntity> list = GroupManager.findAllGroup();
 		List<GroupMapping> groups = GroupMapping.createList(list);
 		return Response.ok(groups).build();
@@ -39,7 +41,9 @@ public class GroupResource {
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response create(GroupMapping mapping, @Context HttpServletRequest httpRequest) {
+	public Response create(GroupMapping mapping, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		GroupEntity g = GroupManager.addGroup(mapping);
 		return Response.ok(new GroupMapping(g)).build();
 	}
@@ -47,7 +51,9 @@ public class GroupResource {
 	@GET
 	@Path("{id}/day")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getGroups(@PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response getGroups(@PathParam("id") String id, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List<DayEntity> list = DayManager.findByGroup(id);
 		List<DayMapping> groups = DayMapping.createList(list);
 		return Response.ok(groups).build();
@@ -56,7 +62,9 @@ public class GroupResource {
 	@GET
 	@Path("/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getById(@PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response getById(@PathParam("id") String id, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		GroupEntity g = GroupManager.findGroup(id);
 		return Response.ok(new GroupMapping(g)).build();
 	}
@@ -65,14 +73,18 @@ public class GroupResource {
 	@Path("/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response change(GroupMapping group, @PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response change(GroupMapping group, @PathParam("id") String id,  @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		GroupEntity e = GroupManager.updateGroup(id, group);
 		return Response.ok(new GroupMapping(e)).build();
 	}
 
 	@DELETE
 	@Path("/{id}/")
-	public Response delete(@PathParam("id") String id, @Context HttpServletRequest httpRequest) {
+	public Response delete(@PathParam("id") String id,  @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
 		List<DayEntity> list = DayManager.findByGroup(id);
 		if (list.size() > 0) {
 			throw new BadRequestException("There are some days.");
