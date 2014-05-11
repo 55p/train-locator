@@ -1,4 +1,10 @@
-<!-- Indices written at Thu, 8 May 2014 15:34:02 CEST -->
+<!-- Indices written at Sun, 11 May 2014 14:16:02 CEST -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 11 times in query history -->
+    <datastore-index kind="GroupEntity" ancestor="true" source="auto">
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

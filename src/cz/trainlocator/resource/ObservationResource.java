@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -64,11 +65,11 @@ public class ObservationResource {
 	
 	@POST
 	@Path("/")
-	@Consumes({MediaType.APPLICATION_JSON})
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
     public Response create(ObservationMapping observation, @Context HttpServletResponse response) {
 		response.addHeader("Access-Control-Allow-Origin", "*");
-		
+	    
 		ObservationEntity o = ObservationManager.addObservation(observation);
 		return Response.ok(new ObservationMapping(o)).build();
 	}
@@ -106,6 +107,34 @@ public class ObservationResource {
 		
 		ObservationManager.deleteObservation(id);
 		return Response.noContent().build();
-	}	
+	}
+
+	@OPTIONS
+	@Path("/")
+    public Response options(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
+	}
+	@OPTIONS
+	@Path("/{id}/")
+    public Response optionsId(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
+	}
+	@OPTIONS
+	@Path("/add/")
+    public Response optionsAdd(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
+	}
 
 }

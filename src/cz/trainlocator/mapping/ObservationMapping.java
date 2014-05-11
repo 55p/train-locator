@@ -3,8 +3,11 @@ package cz.trainlocator.mapping;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import cz.trainlocator.entity.ObservationEntity;
 
+@XmlRootElement
 public class ObservationMapping {
 
 	private String id;

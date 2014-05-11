@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -92,5 +93,24 @@ public class GroupResource {
 
 		GroupManager.deleteGroup(id);
 		return Response.noContent().build();
+	}
+	
+	@OPTIONS
+	@Path("/")
+    public Response options(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
+	}
+	@OPTIONS
+	@Path("/{id}/")
+    public Response optionsId(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
 	}
 }

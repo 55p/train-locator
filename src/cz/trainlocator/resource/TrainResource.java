@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -67,13 +68,12 @@ public class TrainResource {
 		return Response.ok(result).build();
 	}
 
-	@GET
+	@POST
 	@Path("/{id}/add")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addRecord(@PathParam("id") String id, RecordMapping record, @Context HttpServletResponse response) {
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		
-		//TrainEntity t = TrainManager.findTrain(id);
 		record.setTrainId(id);
 		RecordEntity e = RecordManager.addObservation(record);
 		return Response.ok(new RecordMapping(e)).build();
@@ -123,5 +123,41 @@ public class TrainResource {
 
 		TrainManager.deleteTrain(id);
 		return Response.noContent().build();
+	}
+	@OPTIONS
+	@Path("/")
+    public Response options(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
+	}
+	@OPTIONS
+	@Path("/{id}/")
+    public Response optionsId(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
+	}
+	@OPTIONS
+	@Path("/{id}/add")
+    public Response optionsAdd(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
+	}
+	@OPTIONS
+	@Path("/multiple/")
+    public Response optionsMult(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
 	}
 }

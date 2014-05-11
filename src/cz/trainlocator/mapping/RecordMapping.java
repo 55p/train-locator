@@ -8,7 +8,7 @@ import cz.trainlocator.entity.RecordEntity;
 
 public class RecordMapping {
 	private String id;
-	//private Date date;
+
 	private int year;
 	private int month;
 	private int day;
