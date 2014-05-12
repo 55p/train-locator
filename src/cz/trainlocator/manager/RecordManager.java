@@ -32,7 +32,8 @@ public class RecordManager {
 		}
 		return entity;
 	}
-
+/*
+    //nepouzito 
 	@SuppressWarnings("unchecked")
 	public static List<RecordEntity> findAllTrainObservation() {
 		List<RecordEntity> result;
@@ -45,7 +46,7 @@ public class RecordManager {
 		}
 		return result;
 	}
-
+*/
 	public static List<RecordEntity> findByTrain(String trainId) {
 		List<RecordEntity> result;
 		PersistenceManager pm = Persistence.getManager();
