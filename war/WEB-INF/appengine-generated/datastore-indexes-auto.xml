@@ -1,9 +1,14 @@
-<!-- Indices written at Sun, 11 May 2014 14:16:02 CEST -->
+<!-- Indices written at Mon, 12 May 2014 08:17:52 CEST -->
 
 <datastore-indexes>
 
-    <!-- Used 11 times in query history -->
+    <!-- Used 1 time in query history -->
     <datastore-index kind="GroupEntity" ancestor="true" source="auto">
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="DayEntity" ancestor="true" source="auto">
         <property name="name" direction="asc"/>
     </datastore-index>
 
