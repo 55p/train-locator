@@ -112,12 +112,6 @@ public class DayManager {
 		for (DayEntity d : result) {
 			d.getGroup();
 		}
-		/*
-		for (DayEntity d : result) {
-			d.setGroup(group);
-		}
-		group.setDays(result);
-		*/
 		return result;
 	}
 

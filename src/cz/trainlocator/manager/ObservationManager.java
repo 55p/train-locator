@@ -59,6 +59,46 @@ public class ObservationManager {
     	}
     	return entity;
     }
+    
+    public static ObservationEntity findByTrain(String id) {
+    	Key observationKey = null;
+    	try {
+	    	Key trainKey = KeyFactory.stringToKey(id);
+	    	Key dayKey = trainKey.getParent();
+	    	Key groupKey = dayKey.getParent();
+	    	observationKey = groupKey.getParent();
+    	} catch (Exception e) {
+    		throw new NotFoundException("Observation with train ID="+id+" not exists");
+    	}
+    	
+    	PersistenceManager pm = Persistence.getManager();
+    	ObservationEntity entity;
+    	try {
+    		entity = selectObservation(pm, KeyFactory.keyToString(observationKey));
+    	} finally {
+    		pm.close();
+    	}
+    	return entity;
+    }
+    public static ObservationEntity findByDay(String id) {
+    	Key observationKey = null;
+    	try {
+	    	Key dayKey = KeyFactory.stringToKey(id);
+	    	Key groupKey = dayKey.getParent();
+	    	observationKey = groupKey.getParent();
+    	} catch (Exception e) {
+    		throw new NotFoundException("Observation with train ID="+id+" not exists");
+    	}
+    	
+    	PersistenceManager pm = Persistence.getManager();
+    	ObservationEntity entity;
+    	try {
+    		entity = selectObservation(pm, KeyFactory.keyToString(observationKey));
+    	} finally {
+    		pm.close();
+    	}
+    	return entity;
+    }
 
     @SuppressWarnings("unchecked")
 	public static List<ObservationEntity> findAllObservation() {
@@ -93,7 +133,6 @@ public class ObservationManager {
     	} catch (Exception ex) {
     		throw new NotFoundException("Observation id="+id+" not exists");
     	}
-    	
     }
     
     static ObservationEntity selectObservation(PersistenceManager pm, Key key) {

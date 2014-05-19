@@ -96,6 +96,31 @@ public class RecordManager {
 		return result;
 	}
 	
+	public static List<RecordEntity> findByTrainList(List<TrainEntity> trainList, int dayCount) {
+		List<RecordEntity> result = new LinkedList<RecordEntity>();
+		PersistenceManager pm = Persistence.getManager();
+		try {
+			Calendar start = Calendar.getInstance();
+//			start.setTime(new Date());
+
+			Calendar end = Calendar.getInstance();
+			end.add(Calendar.DATE, -dayCount);///setTime(endDate);
+
+			while(start.after(end)){
+			    //Date targetDay = start.getTime();
+			    // Do Work Here
+			    for (TrainEntity train : trainList) {
+					result.addAll(selectByTrainEntity(train, start.get(Calendar.YEAR), start.get(Calendar.MONTH)+1, start.get(Calendar.DATE), pm));
+				}
+			    start.add(Calendar.DATE, -1);
+			    
+			}
+		} finally {
+			pm.close();
+		}
+		return result;
+	}
+	
 	@SuppressWarnings("unchecked")
 	private static List<RecordEntity> selectByTrainEntity(TrainEntity train, PersistenceManager pm) {
 		List<RecordEntity> result;
@@ -195,7 +220,7 @@ public class RecordManager {
 		try {
 			return pm.getObjectById(RecordEntity.class, KeyFactory.stringToKey(id));
 		} catch (Exception ex) {
-			throw new NotFoundException("TrainObservation id " + id + " not exists");
+			throw new NotFoundException("Record id " + id + " not exists");
 		}
 	}
 
@@ -203,7 +228,7 @@ public class RecordManager {
 		try {
 			return pm.getObjectById(RecordEntity.class, key);
 		} catch (Exception ex) {
-			throw new NotFoundException("TrainObservation id "+ KeyFactory.keyToString(key) + " not exists");
+			throw new NotFoundException("Record id "+ KeyFactory.keyToString(key) + " not exists");
 		}
 
 	}

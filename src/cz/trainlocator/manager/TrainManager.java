@@ -116,7 +116,6 @@ public class TrainManager {
 		Query q = pm.newQuery(TrainEntity.class, "day == d");
 		q.declareParameters("DayEntity d");
 		
-
 		result = (List<TrainEntity>) q.execute(day);
 		
 		for (TrainEntity tr : result) {

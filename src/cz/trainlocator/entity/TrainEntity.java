@@ -106,5 +106,4 @@ public class TrainEntity {
 	public void setObservations(List<RecordEntity> observations) {
 		this.observations = observations;
 	}
-
 }

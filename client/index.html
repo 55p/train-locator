@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8" />
+  <title>Sledování nasazení vozidel</title>
+  <script src="prototype.js"></script>
+  <script src="server.js"></script>
+  <script src="memory.js"></script>
+  <script src="object.js"></script>
+  <script src="ui.js"></script>
+  <script src="listener.js"></script>
+  <script src="canvas.js"></script>
+  <script src="storage.js"></script>
+  <script src="notify.js"></script>
+  <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <nav>
+      <div></div>
+      <div></div>
+    </nav>
+    <div id="canvasContainer"><canvas width="800" height="35"></canvas></div>
+    <article></article>
+    <footer>
+      <p itemscope itemtype="http://schema.org/Person">(c) <span itemprop="name">Pavel Dvořák</span>, 2014, <span itemprop="url" href="http://55p.8u.cz">http://55p.8u.cz</span>, 
+      <span class="affiliation" itemscope itemtype="http://schema.org/Organization"><span itemprop="legalName">FEL ČVUT</span></span></p>
+      <p><a href = "">vymazat lokální paměť</a> <a href = "">povolit notifikace</a></p>  
+    </footer>
+  <script>
+  var Listener;
+  
+  window.addEventListener("load", function(e) {
+    Listener = new lst();
+    Listener.pageNavigator(window.location.href);
+    window.history.pushState({url: window.location.href}, null, window.location.href);
+    Canvas = new cv();
+    
+    Listener.playAudio();
+    document.querySelector("footer a").addEventListener("click", Listener.clearMemory.bind(Listener));
+    document.querySelector("footer a+a").addEventListener("click", function (e) {
+      Notify.enable();
+      e.preventDefault();
+    });
+    Notify.enable();
+  });
+  
+  
+  </script>
+  </body>
+</html>

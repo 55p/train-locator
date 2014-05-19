@@ -66,9 +66,7 @@ public class GroupManager {
 		List<GroupEntity> result;
 		PersistenceManager pm = Persistence.getManager();
 		try {
-			ObservationEntity obser = ObservationManager.selectObservation(pm,
-					observationId);
-
+			ObservationEntity obser = ObservationManager.selectObservation(pm, observationId);
 			result = selectByObservationEntity(obser, pm);
 		} finally {
 			pm.close();
@@ -100,12 +98,6 @@ public class GroupManager {
 		for (GroupEntity g : result) {
 			g.getObservation();
 		}
-		/*
-		for (GroupEntity g : result) {
-			g.setObservation(obser);
-		}
-		obser.setGroups(result);
-		 */
 		return result;
 	}
 
@@ -153,8 +145,7 @@ public class GroupManager {
 			GroupEntity entity = pm.getObjectById(GroupEntity.class, key);
 			return entity;
 		} catch (Exception ex) {
-			throw new NotFoundException("Group id="
-					+ KeyFactory.keyToString(key) + " not exists");
+			throw new NotFoundException("Group id=" + KeyFactory.keyToString(key) + " not exists");
 		}
 	}
 }

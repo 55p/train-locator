@@ -1,5 +1,6 @@
 package cz.trainlocator.resource;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,11 +18,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import cz.trainlocator.entity.DayEntity;
+import cz.trainlocator.entity.GroupEntity;
+import cz.trainlocator.entity.ObservationEntity;
 import cz.trainlocator.entity.TrainEntity;
 import cz.trainlocator.exception.BadRequestException;
 import cz.trainlocator.manager.DayManager;
+import cz.trainlocator.manager.GroupManager;
+import cz.trainlocator.manager.ObservationManager;
 import cz.trainlocator.manager.TrainManager;
+import cz.trainlocator.mapping.AllMapping;
 import cz.trainlocator.mapping.DayMapping;
+import cz.trainlocator.mapping.GroupMapping;
+import cz.trainlocator.mapping.ObservationMapping;
 import cz.trainlocator.mapping.TrainMapping;
 
 @Path("/day/")
@@ -58,6 +66,35 @@ public class DayResource {
 		List<TrainEntity> list = TrainManager.findByDay(id);
 		List<TrainMapping> groups = TrainMapping.createList(list);
 		return Response.ok(groups).build();
+	}
+	
+	@GET
+	@Path("{id}/data")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getData(@PathParam("id") String id, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+
+		ObservationEntity obs = ObservationManager.findByDay(id);
+		ObservationMapping obsMapping = new ObservationMapping(obs);
+		
+		List<GroupEntity> groupList = GroupManager.findByObservation(obs.getKey());
+		List<GroupMapping> groupMapping = GroupMapping.createList(groupList);
+		
+		List<DayEntity> dayList = DayManager.findByGroupList(groupList);
+		List<DayMapping> dayMapping = DayMapping.createList(dayList);
+		
+		List<TrainEntity> trainList = TrainManager.findByDayList(dayList);
+		List<TrainMapping> trainMapping = TrainMapping.createList(trainList);
+		Collections.sort(trainMapping);
+		
+		AllMapping all = new AllMapping();
+		
+		all.setObservation(obsMapping);
+		all.setGroups(groupMapping);
+		all.setDays(dayMapping);
+		all.setTrains(trainMapping);
+
+		return Response.ok(all).build();
 	}
 
 	@GET

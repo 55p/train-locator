@@ -1,0 +1,264 @@
+/* CSS Document */
+li, ul {
+  margin: 0; padding: 0;
+}
+
+@font-face {
+	font-family: "Mentone";
+  
+  src: url("mentone-semibol.otf") format("woff"),
+  url("mentone-semibol.eot?#iefix") format("eot");
+}
+
+html {
+  height: 90%;
+}   
+
+body {
+  background-color: #FFF39F;
+  height: 90%;
+  font: 0.8em Verdana;
+}
+
+#canvasContainer {
+  min-width: 600px;
+  width: 100%;
+  text-align:center;
+  margin: 0 auto;
+}
+canvas {
+  display: inline;
+}
+
+nav div {
+  background-color: #0C3A9A;
+  color: #FFFFFF;
+  font: 1.1em Arial;
+  margin: 0.5em auto;
+  padding: 0.5ex 0;
+  text-align: center;
+  width: 98%;
+  border-radius: 25px;
+}
+
+nav div * {
+  color: white;
+}
+nav div a {
+  text-decoration: none;
+  border-bottom: thin solid white;
+  transition: all 0.5s;
+} 
+nav div a:hover {
+  color: #28C8FD;
+  border-bottom: thin solid #28C8FD;
+} 
+nav div ul {
+  padding-bottom: 0.3ex;
+}
+              
+nav div li {
+  display: inline-block;
+  list-style: none outside none;
+}
+
+nav div li + li::before {
+  content: "|";
+  font-weight: bold;
+  margin: 0 0.5em;
+}
+
+@media (max-height:639px) {
+  footer {
+    font-size: 70%;
+    position: relative; top: 100px;
+    padding-bottom: 1em;
+  }
+  body, html {
+    min-height: 100%;
+  }
+}
+
+footer {
+  color: gray;
+  text-align: right;
+  display: block;
+  margin: 0 auto;
+}
+footer a {
+  color: gray;
+}
+
+article {
+  height: 100%; 
+}
+article > p {
+  margin-left: 2em;
+  font-size: 120%;
+  line-height: 200%;
+   
+  transform-origin: 0 0;
+  transform: rotate(5deg);
+   
+  -webkit-transform-origin: 0 0;
+  -webkit-transform: rotate(5deg);
+}
+article > p a {
+  color: blue;
+  transition: all 2s;
+}
+article > p a:hover {
+  color: red;
+  transition: all 0.5s;
+}
+
+h1 {
+  letter-spacing: 0.4px;
+  font-size: 2.5em;
+  font-family: Mentone;
+  text-align: center;
+  margin: 0.5em;
+  padding: 0;
+}
+
+h1 ~ div, h1 ~ aside {
+  width: 98%;
+  overflow: auto;
+  max-height: 75%;
+  margin: 0 auto;
+  padding: 1ex 1ex;
+}
+
+h1 ~ aside p {
+  line-height: 150%;
+  height: 100%;
+  margin: 0.3em;
+}
+h1 ~ aside p span:nth-of-type(2n+1) {
+  display: inline-block;
+  width: 3em;
+  height: 100%;
+  vertical-align: top;
+}
+h1 ~ aside p span:nth-of-type(2n) {
+  display: inline-block;
+  height: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 1ex auto;
+  font-size: 0.9em;
+}
+td {
+  background-color: white;
+}
+td, th {
+  font-weight: normal;
+  border: thin solid black;
+  margin: 0;
+  padding: 0.3ex 1ex;
+  text-align: center;
+  white-space: nowrap;
+}
+
+tr:nth-child(2n+1) td {
+  background-color: #DDF2FF;
+}
+tr:nth-child(2n+1) td.dark {
+  background-color: #A8DEFF;
+}
+tr:nth-child(2n) td.dark {
+  background-color: #EFEFEF;
+}
+
+tr.today td {
+  background-color: #FFE1D2;
+}
+tr.today td.dark {
+  background-color: #FFB18C;
+}
+tr.today td.date {
+  background-color: #F8AD01; 
+}
+
+tr:hover td {
+  background-color: #FFC488;
+}
+tr:hover td.dark {
+  background-color: #FF952B;
+}
+tr:hover td.date {
+  background-color: #B68001;
+  color: white;
+}
+
+tr td.date, tr th {
+  font-size: 80%;
+  background-color: #D8D8D8;
+}
+
+table tr:not(:last-child):not(:first-child) th,
+table tr:first-child th[colspan],
+table tr:last-child th[colspan],
+table tr:first-child th[rowspan],
+tr td.date {
+  font-weight: bold;
+  font-size: 100%;
+}
+
+td.link {
+  cursor: pointer;
+}
+
+form {
+  width: 50em;
+  margin: 0 auto;
+}
+
+form p:first-child {
+  color: red;
+}                       
+label {
+  margin-top: 0.5ex;
+  text-align: left;
+  display: block;
+}
+p + p + p > label {
+  width: 35em;
+  text-align: right;
+}
+
+label > input:first-child {
+  width: 10em;
+  margin-left: 1em;
+  margin-right: 15em;
+}
+label > select:first-child {
+  width: 25.5em;
+  margin-left: 1em;
+}
+label > input[type=radio] {
+  width: 1em;
+  margin: 0 1em;
+}
+  
+div#loading {
+  width: 800px;
+  height: 480px;
+  background-image: url("loading.png");
+  background-position: 0 0;
+  margin: 0 auto;
+  
+  -webkit-animation: loadingSteps 0.7s steps(11) infinite;
+  animation: loadingSteps 0.8s steps(11) infinite;
+}
+
+@keyframes loadingSteps {
+  0% {background-position: 0 0px;}
+  100% {background-position: -8800px 0px;}
+}
+@-webkit-keyframes loadingSteps {
+  0% {background-position: 0 0px;}
+  100% {background-position: -8800px 0px;}
+}

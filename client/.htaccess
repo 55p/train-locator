@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteBase /locator
+RewriteRule ^(.*).html$ index.html [L,QSA]

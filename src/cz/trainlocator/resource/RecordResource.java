@@ -1,11 +1,16 @@
 package cz.trainlocator.resource;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -26,6 +31,34 @@ import cz.trainlocator.mapping.RecordMapping;
 @Path("/record")
 public class RecordResource {
 
+	@POST
+	@Path("/")
+	@Consumes({MediaType.APPLICATION_JSON})
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addRecord(RecordMapping observation, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
+		RecordEntity e = RecordManager.addObservation(observation);
+		return Response.ok(new RecordMapping(e)).build();
+	}
+	@POST
+	@Path("/multiple/")
+	@Consumes({MediaType.APPLICATION_JSON})
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addRecords(List<RecordMapping> observations, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
+		List <RecordMapping> result = new LinkedList<RecordMapping>();
+		for (RecordMapping record : observations) {
+			try {
+				RecordEntity e = RecordManager.addObservation(record);
+				result.add(new RecordMapping(e));
+			} catch (Exception ex) {
+			}
+		}
+		return Response.ok(result).build();
+	}
+	
 	@GET
 	@Path("/observation/{id}/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -55,6 +88,15 @@ public class RecordResource {
 		response.addHeader("Access-Control-Allow-Origin", "*");
 			
 		List<RecordMapping> mappedRecord = findByObservation(id, year, month, -1);
+		return Response.ok(mappedRecord).build();
+	}
+	@GET
+	@Path("/observation/{id}/actual/{count}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getByObservationActual(@PathParam("id") String id, @PathParam("count") int count, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+			
+		List<RecordMapping> mappedRecord = findByObservation(id, count);
 		return Response.ok(mappedRecord).build();
 	}
 	
@@ -153,12 +195,24 @@ public class RecordResource {
 		List<RecordMapping> mappedRecord = findByTrain(id, year, month, -1);
 		return Response.ok(mappedRecord).build();
 	}
-  
+
+	private List<RecordMapping> findByObservation(String observationId, int dayCount) {
+		List<GroupEntity> groups = GroupManager.findByObservation(observationId);
+		return findByGroup(groups, dayCount);
+	}
 	private List<RecordMapping> findByObservation(String observationId, int year, int month, int day) {
 		List<GroupEntity> groups = GroupManager.findByObservation(observationId);
 		return findByGroup(groups, year,month,day);
 	}
-	
+
+	private List<RecordMapping> findByGroup(String groupId, int dayCount) {
+		List<DayEntity> days = DayManager.findByGroup(groupId);
+		return findByDay(days, dayCount);
+	}
+	private List<RecordMapping> findByGroup(List<GroupEntity> groups, int dayCount) {
+		List<DayEntity> days = DayManager.findByGroupList(groups);
+		return findByDay(days, dayCount);
+	}
 	private List<RecordMapping> findByGroup(String groupId, int year, int month, int day) {
 		List<DayEntity> days = DayManager.findByGroup(groupId);
 		return findByDay(days, year,month,day);
@@ -168,6 +222,14 @@ public class RecordResource {
 		return findByDay(days, year,month,day);
 	}
 
+	private List <RecordMapping> findByDay(String dayId, int dayCount) {
+		List<TrainEntity> trains = TrainManager.findByDay(dayId);
+		return findByTrain(trains, dayCount);
+	}
+	private List <RecordMapping> findByDay(List<DayEntity> days, int dayCount) {
+		List<TrainEntity> trains = TrainManager.findByDayList(days);
+		return findByTrain(trains, dayCount);
+	}
 	private List <RecordMapping> findByDay(String dayId, int year, int month, int day) {
 		List<TrainEntity> trains = TrainManager.findByDay(dayId);
 		return findByTrain(trains, year,month,day);
@@ -176,10 +238,14 @@ public class RecordResource {
 		List<TrainEntity> trains = TrainManager.findByDayList(days);
 		return findByTrain(trains, year,month,day);
 	}
-	
+
 	private List <RecordMapping> findByTrain(String trainId, int year, int month, int day) {
 		TrainEntity train = TrainManager.findTrain(trainId);
 		return findByTrain(Arrays.asList(train), year,month,day);
+	}
+	private List <RecordMapping> findByTrain(String trainId, int dayCount) {
+		TrainEntity train = TrainManager.findTrain(trainId);
+		return findByTrain(Arrays.asList(train), dayCount);
 	}
 	private List <RecordMapping> findByTrain(List<TrainEntity> trains, int year, int month, int day) {
 		List<RecordEntity> records;
@@ -190,5 +256,32 @@ public class RecordResource {
 		}
 		List<RecordMapping> mappedRecord = RecordMapping.createList(records);
 		return mappedRecord;
+	}
+	private List <RecordMapping> findByTrain(List<TrainEntity> trains, int dayCount) {
+		List<RecordEntity> records = new ArrayList();
+		if (dayCount > 0) {
+			records = RecordManager.findByTrainList(trains, dayCount);
+		}
+		List<RecordMapping> mappedRecord = RecordMapping.createList(records);
+		return mappedRecord;
+	}
+
+	@OPTIONS
+	@Path("/")
+    public Response optionsAdd(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
+	}
+	@OPTIONS
+	@Path("/multiple/")
+    public Response optionsMultiple(@Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
+	    
+		return Response.ok("").build();
 	}
 }

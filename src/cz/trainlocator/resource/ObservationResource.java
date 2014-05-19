@@ -1,5 +1,6 @@
 package cz.trainlocator.resource;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,21 +17,28 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import cz.trainlocator.entity.DayEntity;
 import cz.trainlocator.entity.GroupEntity;
 import cz.trainlocator.entity.ObservationEntity;
 import cz.trainlocator.entity.RecordEntity;
+import cz.trainlocator.entity.TrainEntity;
 import cz.trainlocator.exception.BadRequestException;
+import cz.trainlocator.manager.DayManager;
 import cz.trainlocator.manager.GroupManager;
 import cz.trainlocator.manager.ObservationManager;
 import cz.trainlocator.manager.RecordManager;
+import cz.trainlocator.manager.TrainManager;
+import cz.trainlocator.mapping.AllMapping;
+import cz.trainlocator.mapping.DayMapping;
 import cz.trainlocator.mapping.GroupMapping;
 import cz.trainlocator.mapping.ObservationMapping;
 import cz.trainlocator.mapping.RecordMapping;
+import cz.trainlocator.mapping.TrainMapping;
 
 
 @Path("/observation/")
 public class ObservationResource {
-
+/*
 	@POST
 	@Path("/add/")
 	@Consumes({MediaType.APPLICATION_JSON})
@@ -41,7 +49,7 @@ public class ObservationResource {
 		RecordEntity e = RecordManager.addObservation(observation);
 		return Response.ok(new RecordMapping(e)).build();
 	}
-	
+	*/
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -61,6 +69,35 @@ public class ObservationResource {
 		List<GroupEntity> list = GroupManager.findByObservation(id);
 		List<GroupMapping> groups = GroupMapping.createList(list);
 		return Response.ok(groups).build();
+	}
+	
+	@GET
+	@Path("{id}/data")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getData(@PathParam("id") String id, @Context HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		
+		ObservationEntity obs = ObservationManager.findObservation(id);
+		ObservationMapping obsMapping = new ObservationMapping(obs);
+		
+		List<GroupEntity> groupList = GroupManager.findByObservation(id);
+		List<GroupMapping> groupMapping = GroupMapping.createList(groupList);
+		
+		List<DayEntity> dayList = DayManager.findByGroupList(groupList);
+		List<DayMapping> dayMapping = DayMapping.createList(dayList);
+		
+		List<TrainEntity> trainList = TrainManager.findByDayList(dayList);
+		List<TrainMapping> trainMapping = TrainMapping.createList(trainList);
+		Collections.sort(trainMapping);
+		
+		AllMapping all = new AllMapping();
+		
+		all.setObservation(obsMapping);
+		all.setGroups(groupMapping);
+		all.setDays(dayMapping);
+		all.setTrains(trainMapping);
+		
+		return Response.ok(all).build();
 	}
 	
 	@POST
@@ -121,15 +158,6 @@ public class ObservationResource {
 	@OPTIONS
 	@Path("/{id}/")
     public Response optionsId(@Context HttpServletResponse response) {
-		response.addHeader("Access-Control-Allow-Origin", "*");
-		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
-	    
-		return Response.ok("").build();
-	}
-	@OPTIONS
-	@Path("/add/")
-    public Response optionsAdd(@Context HttpServletResponse response) {
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		response.addHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS, HEAD");
